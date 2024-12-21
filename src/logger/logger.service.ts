@@ -4,8 +4,8 @@ import { Model } from 'mongoose';
 import { Logger } from './logger.scheme';
 
 @Injectable()
-export class LoggerService {
-  constructor(@InjectModel('Logger') private loggerModel: Model<Logger>) {}
+export default class LoggerService {
+  constructor(@InjectModel('Logger') private LoggerModel: Model<Logger>) {}
 
   async logRequest(
     method: string,
@@ -13,12 +13,13 @@ export class LoggerService {
     type: string,
     ip: string,
   ): Promise<Logger> {
-    const newLog = new this.loggerModel({
+    const newLog = new this.LoggerModel({
       ip,
       type,
       method,
       path,
     });
-    return await newLog.save();
+    const result = await newLog.save();
+    return result;
   }
 }

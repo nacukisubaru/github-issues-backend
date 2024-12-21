@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { LoggerService } from './logger.service';
 import { loggerSchema } from './logger.scheme';
+import LoggerService from './logger.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Logger', schema: loggerSchema }]),
   ],
   providers: [LoggerService],
-  exports: [LoggerService]
+  exports: [LoggerService],
 })
-export class LoggerModule {}
+export default class LoggerModule {}
