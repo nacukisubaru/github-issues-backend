@@ -6,11 +6,10 @@ import LoggerService from './logger.service';
 export default class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly loggerService: LoggerService) {}
 
-  async use(req: Request, next: NextFunction) {
+  async use(req: Request, _: Response, next: NextFunction) {
     const { method, originalUrl, ip } = req;
 
-    await this.loggerService.logRequest(method, originalUrl, 'test', ip);
-
+    await this.loggerService.logRequest(method, originalUrl, ip);
     next();
   }
 }

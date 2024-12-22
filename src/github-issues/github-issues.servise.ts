@@ -6,7 +6,9 @@ import { firstValueFrom } from 'rxjs';
 export default class GithubIssuesService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getIssues(user: string, repo: string) {
+  private limit = 10;
+
+  private static getGithubUrl() {
     const githubUrl = process.env.GITHUB_API_URL;
     if (!githubUrl) {
       throw new HttpException(
@@ -14,8 +16,20 @@ export default class GithubIssuesService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    return githubUrl;
+  }
 
-    const url = `${githubUrl}/repos/${user}/${repo}/issues`;
+  async getIssues(user: string, repo: string, page: string) {
+    const githubUrl = GithubIssuesService.getGithubUrl();
+    const url = `${githubUrl}/repos/${user}/${repo}/issues?page=${page}&per_page=${this.limit}`;
+
+    const response = await firstValueFrom(this.httpService.get(url));
+    return response.data;
+  }
+
+  async getIssue(user: string, repo: string, id: string) {
+    const githubUrl = GithubIssuesService.getGithubUrl();
+    const url = `${githubUrl}/repos/${user}/${repo}/issues/${id}`;
 
     const response = await firstValueFrom(this.httpService.get(url));
     return response.data;

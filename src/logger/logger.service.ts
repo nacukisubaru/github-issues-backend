@@ -7,19 +7,25 @@ import { Logger } from './logger.scheme';
 export default class LoggerService {
   constructor(@InjectModel('Logger') private LoggerModel: Model<Logger>) {}
 
-  async logRequest(
-    method: string,
-    path: string,
-    type: string,
-    ip: string,
-  ): Promise<Logger> {
+  private limit = 10;
+
+  async logRequest(method: string, path: string, ip: string): Promise<Logger> {
     const newLog = new this.LoggerModel({
       ip,
-      type,
-      method,
       path,
+      method,
     });
     const result = await newLog.save();
     return result;
+  }
+
+  async getLogs(page: number) {
+    const skip = (page - 1) * this.limit;
+    const logs = await this.LoggerModel.find()
+      .sort({ timestamp: -1 })
+      .skip(skip)
+      .limit(this.limit)
+      .exec();
+    return logs;
   }
 }
