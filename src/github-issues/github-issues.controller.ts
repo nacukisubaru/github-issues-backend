@@ -7,7 +7,7 @@ export default class GithubIssuesController {
 
   @Get('/issues')
   getIssues(
-  @Query('user') user: string,
+    @Query('user') user: string,
     @Query('repo') repo: string,
     @Query('page') page: string,
   ) {
@@ -16,7 +16,7 @@ export default class GithubIssuesController {
 
   @Get('/issue')
   getIssue(
-  @Query('user') user: string,
+    @Query('user') user: string,
     @Query('repo') repo: string,
     @Query('id') id: string,
   ) {
