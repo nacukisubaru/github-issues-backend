@@ -1,5 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import GithubIssuesService from './github-issues.servise';
+import { GetIssuesDto } from './dto/get-issues.dto';
+import { GetIssueDto } from './dto/get-issue.dto';
 
 @Controller('github-issues')
 export default class GithubIssuesController {
@@ -7,19 +9,23 @@ export default class GithubIssuesController {
 
   @Get('/issues')
   getIssues(
-    @Query('user') user: string,
-    @Query('repo') repo: string,
-    @Query('page') page: string,
+    @Query(new ValidationPipe()) getIssuesDto: GetIssuesDto
   ) {
-    return this.issuesService.getIssues(user, repo, page);
+    return this.issuesService.getIssues(
+      getIssuesDto.user, 
+      getIssuesDto.repo, 
+      getIssuesDto.page
+    );
   }
 
   @Get('/issue')
   getIssue(
-    @Query('user') user: string,
-    @Query('repo') repo: string,
-    @Query('id') id: string,
+    @Query(new ValidationPipe()) getIssueDto: GetIssueDto
   ) {
-    return this.issuesService.getIssue(user, repo, id);
+    return this.issuesService.getIssue(
+      getIssueDto.user, 
+      getIssueDto.repo, 
+      getIssueDto.id
+    );
   }
 }
