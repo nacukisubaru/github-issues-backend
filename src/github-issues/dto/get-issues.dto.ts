@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class GetIssuesDto {
+export default class GetIssuesDto {
   @IsString()
   user: string;
 
