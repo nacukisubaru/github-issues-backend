@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 export default class GithubIssuesService {
   constructor(private readonly httpService: HttpService) {}
 
-  private limit = 10;
+  private limit = 30;
 
   private static getGithubUrl() {
     const githubUrl = process.env.GITHUB_API_URL;
@@ -32,6 +32,14 @@ export default class GithubIssuesService {
     const url = `${githubUrl}/repos/${user}/${repo}/issues/${id}`;
 
     const response = await firstValueFrom(this.httpService.get(url));
-    return response.data;
+    const responseData = response.data;
+    if (responseData.comments_url) {
+      const comments = await firstValueFrom(
+        this.httpService.get(responseData.comments_url),
+      );
+      responseData.commentsList = comments.data;
+    }
+
+    return responseData;
   }
 }

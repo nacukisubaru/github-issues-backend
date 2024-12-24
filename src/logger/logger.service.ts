@@ -7,7 +7,7 @@ import { Logger } from './logger.scheme';
 export default class LoggerService {
   constructor(@InjectModel('Logger') private LoggerModel: Model<Logger>) {}
 
-  private limit = 10;
+  private limit = 30;
 
   async logRequest(method: string, path: string, ip: string): Promise<Logger> {
     const newLog = new this.LoggerModel({
